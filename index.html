@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <title>NAZA Barcode Scanner</title>
+
+  <script src="https://unpkg.com/@zxing/browser@latest"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f7f4;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    h1 {
+      color: #246b3c;
+      font-size: 28px;
+    }
+
+    #video {
+      width: 100%;
+      max-height: 60vh;
+      background: black;
+      border-radius: 12px;
+      margin-top: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      background: #246b3c;
+      color: white;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>NAZA FARM MANAGER</h1>
+  <p>Barcode Scanner</p>
+
+  <button onclick="startScanner()">
+    📷 เปิดกล้องสแกน Barcode
+  </button>
+
+  <video id="video" playsinline></video>
+
+  <div id="result">
+    รอสแกน Barcode
+  </div>
+
+</div>
+
+<script>
+
+let codeReader;
+let controls;
+
+async function startScanner() {
+
+  const resultBox = document.getElementById("result");
+  const video = document.getElementById("video");
+
+  try {
+
+    resultBox.innerHTML = "กำลังเปิดกล้อง...";
+
+    codeReader =
+      new ZXingBrowser.BrowserMultiFormatReader();
+
+    controls =
+      await codeReader.decodeFromConstraints(
+        {
+          video: {
+            facingMode: {
+              ideal: "environment"
+            }
+          },
+          audio: false
+        },
+        video,
+        (result, error, control) => {
+
+          if (result) {
+
+            const value =
+              result.getText()
+                    .trim()
+                    .toUpperCase();
+
+            resultBox.innerHTML =
+              "อ่านได้: " + value;
+
+            control.stop();
+
+            // ขั้นต่อไปจะส่ง value
+            // กลับไป NAZA Farm Manager
+          }
+        }
+      );
+
+    resultBox.innerHTML =
+      "เล็งกล้องไปที่ Barcode";
+
+  } catch (error) {
+
+    console.error(error);
+
+    resultBox.innerHTML =
+      "เปิดกล้องไม่ได้: " + error.message;
+  }
+}
+
+</script>
+
+</body>
+</html>
