@@ -122,8 +122,11 @@ async function startScanner() {
 
             control.stop();
 
-            // ขั้นต่อไปจะส่ง value
-            // กลับไป NAZA Farm Manager
+            setTimeout(() => {
+  window.location.href =
+    "https://script.google.com/macros/s/AKfycbwROowCas23WJvYX11xu7fGBeh6ORAhRhGek7HMA519jGpFo1YvBYWorrZlTo2vhXm1/exec?tree=" +
+    encodeURIComponent(value);
+}, 500);
           }
         }
       );
