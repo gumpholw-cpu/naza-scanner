@@ -89,7 +89,13 @@ async function startScanner() {
     resultBox.innerHTML = "กำลังเปิดกล้อง...";
 
     codeReader =
-      new ZXingBrowser.BrowserMultiFormatReader();
+     new ZXingBrowser.BrowserMultiFormatReader(
+  new Map([
+    [ZXingBrowser.DecodeHintType.POSSIBLE_FORMATS,
+     [ZXingBrowser.BarcodeFormat.CODE_39]],
+    [ZXingBrowser.DecodeHintType.TRY_HARDER, true]
+  ])
+);
 
     controls =
       await codeReader.decodeFromConstraints(
